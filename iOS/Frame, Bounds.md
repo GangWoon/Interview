@@ -23,8 +23,10 @@ CGRect (x:, y:,width:, height: )  -> CGPoint(x: ,y: ) + CGSize(width: ,height: )
 
     뷰의 CGSize를 변경하는 건 스토리 보드에서 뷰의 크기를 변경하는 것 과 동일하다.
 
-    
+    상위 기준으로 감싸는 사각형을 뜻한다.
 
   * Bounds
 
     origin으로 부터 줄어든 크기만 큼 계산해서 그려준다.
+
+    자기 자신의 크기만 뜻한다.

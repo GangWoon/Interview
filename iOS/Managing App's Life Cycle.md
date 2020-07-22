@@ -87,5 +87,5 @@ iOS 12 이전, scenes를 지원하지 않는 경우 UIKit은 UIApplicationDelega
     앱이 background로 진입해서 delegate method가 반환되면 Uikit은 현재 사용자 인터페이스의 스냅 샷을 만든다. 앱을 다시 foreground로 가져올 때 이미지를 일시적으로 표시한다.
 
 * Background 상태가 되면 중요한 작업을 완료하고 가능한 많은 메모리를 해제해야한다.
-* 종료시 모든 작업을 중지하고 공유 자원을 release시켜야 한다.
+* 종료시 모든 작업을 중지하고 공유 자원을 release시켜야 한다. applicationWillTerminate(_: )
 
