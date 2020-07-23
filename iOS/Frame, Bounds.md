@@ -30,3 +30,4 @@ CGRect (x:, y:,width:, height: )  -> CGPoint(x: ,y: ) + CGSize(width: ,height: )
     origin으로 부터 줄어든 크기만 큼 계산해서 그려준다.
 
     자기 자신의 크기만 뜻한다.
+

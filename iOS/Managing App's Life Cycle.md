@@ -1,5 +1,11 @@
 # Managing App's Life Cycle
 
+* Not Running: App이 아직 실행되지 않았거나 시스템이 완전히 종료된 상태
+* Inactive: Launch screen ,App이 실행중이지만 시스템 알림(통화)이 화면을 덮어서 이벤트를 받지 못하는 상태 
+* Active: App이 실행중이고 이벤트를 받고 있는 상태
+* Background: App이 다른 앱으로 전환되거나 홈 화면으로 나갔을 때 실질적으로 동작을 하고 있는 상태(음악)
+* Suspended: 앱을 다시 실행할 경우 빠른 실행을 위해 메모리에만 올라가 있는 상태(메모리가 부족하면 release시켜서 메모리를 확보한다.)
+
 # Scene Based Life Cycle
 
 Later...
