@@ -58,7 +58,7 @@
 
 ### CurrentContext
 
-view controller를 시작으로 해서 definesPresentationContext가 true 설정되어 있는 viewController의 영역을 새로운 뷰로 띄워준다. splitView에서 마스터를 바꿀때 유용하게 사용될 수 있다.
+view controller를 시작으로 해서 definesPresentationContext가 true 설정되어 있는 viewController의 영역을 새로운 뷰로 띄워준다. splitView에서 root view controller를 바꿀때 유용하게 사용될 수 있다.
 
 
 
