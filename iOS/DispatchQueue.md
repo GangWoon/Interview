@@ -32,7 +32,7 @@ DispatchQueue로 들어가는 작업은 반드시 메소드나 클로저 형태�
 
 ## Main 
 
-메인 스레드에 연결된 serial queue이다. Application의 메인 RunLoop와 함께 동작하며 다른 Input Source들의 실행 단계 사이에 끼어 들어가 실행하게 된다.
+메인 스레드에 연결된 serial queue이다.
 
 
 
