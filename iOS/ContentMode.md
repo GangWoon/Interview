@@ -2,7 +2,11 @@
 
 ---
 
-UIView에 ContentMode라는 속성이 있다. 컨텐츠 사이즈를 어떻게 조절할지 어디에 배치할지 결정하는 정책이다. view는 자신이 보여줄 content를 비트맵 데이터를 캐싱하고 있다. (view bound가 변하거나 content를 그릴 때)
+UIView에 ContentMode라는 속성이 있다. 
+
+컨텐츠 사이즈를 어떻게 조절할지 어디에 배치할지 결정하는 정책이다. 
+
+view는 자신이 보여줄 content를 비트맵 데이터를 캐싱하고 있다. (view bound가 변하거나 content를 그릴 때)
 
 
 

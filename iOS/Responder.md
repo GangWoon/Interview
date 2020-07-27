@@ -4,7 +4,7 @@
 
 앱은 UIResponder 타입의 객체를 이용해서 여러 이벤트를 처리한다.
 
-Responder가 이벤트를 받으면 이를 반드시 처리하거나, 다른 Responder가 처리할 수 있도록 넘겨야 할 의무가 생긴다. 처음 이벤트를 받는 Responder를 First Responder라고 한다.
+Responder가 이벤트를 받으면 이를 반드시 처리하거나, 다른 Responder가 처리할 수 있도록 넘겨야 할 의무가 생긴다. 
 
 위에서 언급했듯이 First Responder가 이벤트를 처리하지 못한다면 처리할 수 있는 Responder가 나올 때 까지 responder chain이 발생한다. 
 

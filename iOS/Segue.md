@@ -28,4 +28,4 @@ presentation style, transition style에 따라 modal. style에 맞는 뷰컨트�
 
 ## Present as Popover
 
-가로 길이가 보통 사이즈인 경우에 popover로 띄우지만, 가로 길이가 compact 사이즈이면 전체화면 modal과 같다.
+가로 길이가 regular 사이즈인 경우에 popover로 띄우지만, 가로 길이가 compact 사이즈이면 전체화면 modal과 같다.
