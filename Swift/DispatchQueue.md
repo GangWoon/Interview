@@ -1,44 +1,88 @@
 # Dispatch Queue
 
+앱 작업을 비동기식으로 수행할 수 있는 GCD 추상화 계층이다. 
+
+작업은 항상 queue에 추가된 순서대로 실행된다.
+
 ---
 
-작업을 순차적, 동시적으로 실행할 수 있지만 무조건 먼저 들어간 작업은 먼저 실행됨을 보장한다. 
-
-DispatchQueue로 들어가는 작업은 반드시 메소드나 클로저 형태로 제공되어야 한다.
-
-* 스레드 관리를 자동으로 한다.
-
-* 작업중에 예외를 발생시키지 않는다.
-
-* 비동기적으로 작업을 queue에 넣어도 데드락이 발생하지 않는다.
-
-* Race Condition에서도 확장성이 좋다.
-
-* Serial DispatchQueue는 lock이나 여러 동기화 연산보다 더 효율 적이다.
 
 
+## **Serial, Concurrent**
 
-## Serial 
+### **serial queue (하나의 스레드)**
 
-한 번에 하나의 작업만 수행하며, 실행 순서는 Queue에 추가된 순서이다. 실행되는 작업은 별도의 스레드 상에서 실행된다. 주로 특정 자원에 동기적인 접근을 할 때 사용한다. 여러 개의 serial queue를 사용하면, queue 별로 하나의 작업을 수행하게 되면서 전체적으로 보면 동시에 여러 작업을 수행되는 것도 가능하다.
+serial dispatch queue는 한 번에 하나의 작업만 수행한다. 
+
+race condition이 발생하지 않도록 특정 값이나 자원에 대한 액세스를 동기화 ㅇ ㅇ하는데 사용된다.
+
+``` swift
+let serialQueue = DispatchQueue(label: "serial.queue")
+```
 
 
 
-## Concurrent
-
-한 개 이상의 작업을 동시에 실행시킨다. 실행 순서는 큐에 들어온 순서이다. 작업은 별도의 스레드에서 수행된다. 동시에 실행되는 작업의 수는 시스템의 상태에 따라 달라진다.
 
 
+### **concurrent queue (여러 개의 스레드)**
 
-## Main 
+concurrent queue는 동시에 여러 가지 작업을 수행할 수 있다. 들어오는 대로 실행되지만, 끝나는 순서는 알 수 없다.
 
-메인 스레드에 연결된 serial queue이다.
+작업은 다른 스레드에서 실행될 것이며, 시스템 상황에 따라서 개수가 결정된다.
+
+``` swift
+let concurrentQueue = DispatchQueue(label: "concurrent.queue", attributes: .concurrent)
+```
 
 
 
-스레드를 만들때 커널 영역과 유저 영억의 메모리를 모두 확보해야하는데, GCD는 그렇지 않는다.
 
 
+## **Synchronous, Asynchronous**
+
+DispatchQueue의 작업은 sync, async하게 사용할 수 있다. 
+
+가장 큰 차이점은 작업을 생성할 때이다.
+
+
+
+### **Synchronous**
+
+작업이 시작하면 스레드가 작업이 끝날 때까지 block 상태가 된다.
+
+
+
+
+
+### **Asynchronous**
+
+작업이 시작과 동시에 반환되며, 스레드는 block 상태가 되지 않는다.
+
+
+
+
+
+### **main.sync를 사용하면 문제가 생기는 이유**
+
+앱을 실행하면 main 스레드에서 작동하는 걸 확인할 수 있다.
+
+<img width="392" alt="image" src="https://user-images.githubusercontent.com/48466830/89296481-5c00fe80-d69d-11ea-8944-9d22a340409a.png">
+
+
+
+
+
+작업이 큐에 들어가면서,  큐는 block상태가 되고, 작업은 큐가 끝날 때까지 기다리게 된다. (DeadLock) 
+
+<img width="740" alt="image" src="https://user-images.githubusercontent.com/48466830/89296646-94a0d800-d69d-11ea-9dae-a81c3237b809.png">
+
+
+
+
+
+다시 말해서 serial.sync를 호출하면 항상 deadlock이 발생하는 게 아닌, 같은 큐를 sync로 호출할 경우에 발생한다.
+
+다른 serial queue를 호출할 때는 정상적으로 작동한다.
 
 
 
