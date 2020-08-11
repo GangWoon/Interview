@@ -5,6 +5,7 @@ And UIImageView, of course, as the name implies, is a view.
 And these objects in their roles as model and view, have traditional responsibilities.
 UIImage is responsible for loading image content.
  And UIImageView is responsible for displaying it, for rendering it.
+
 Now, we can think of this as a simple relationship that we establish once.
  It's a one-way relationship.
 Bu the actual story is a little bit more complicated.
@@ -12,48 +13,62 @@ In addition to rendering being a continuous process, rather than a one-time even
 It's really important to understand in order to measure the performance of your application.
  And this phase is called decoding.
 But in order to discuss decoding, I first need to discuss a concept called a buffer.
-A buffer is just a contiguous region of memory.
+A buffer is just a contiguous region of memory. 버퍼는 연속적인 메모리의 영역이다.
 But we tend to use the term buffer when we're discussing memory that's composed of a sequence of elements of the same size, usually, of the same internal construction.
 And for our purposes, one really important kind of buffer is an image buffer.
- This is a term we use for buffer that holds the in-memory representation of some image.
-Each element of this buffer describes the color and transparency of a single pixel in our image.
- And consequently, the size of this buffer in memory is proportional to the size of the image that it contains.
+
+
+
+ This is a term we use for buffer that holds the in-memory representation of some image. 이미지를 In memory 방식을 보유하는 버퍼를 말핮다.
+Each element of this buffer describes the color and transparency of a single pixel in our image. 
+ And consequently, the size of this buffer in memory is proportional to the size of the image that it contains. 결과적으로 메모리에 있는 버퍼의 크기는 포함된 이미지 크기에 비례한다.
+
+
+
 One particularly important example of a buffer is called the frame buffer.
-And the frame buffer is what holds the actual rendered output of your application.
-So, as your application updates its view hierarchy UIKit will render the application's window and all of its subviews into the frame buffer.
+And the frame buffer is what holds the actual rendered output of your application. 앱에 랜더링 된 아웃풋을 보유한다.
+So, as your application updates its view hierarchy UIKit will render the application's window and all of its subviews into the frame buffer. 실제로 뷰 계층을 업데이트하면, 앱은 윈도우, 서브 뷰들을 프레임 버퍼로 랜더링한다.
 And that frame buffer provides per pixel color information that the display hardware will read in order to illuminate the pixels on the display.
+
+
+
 Now, that last part happens at a fixed interval.
  It can happen at 60 fps.
  So, every 1/60th of a second.
  Or on an iPad with ProMotion Display, it can happen as fast as every 1/120th of a second.
-And if nothing's changed in your application, the display hardware will get the same data back out of the frame buffer that it saw, previously.
+And if nothing's changed in your application, the display hardware will get the same data back out of the frame buffer that it saw, previously. 변경사항이 없다면 프레임 버퍼에서 동일한 데이터를 가져온다.
 But as you change the content of the views in your application, for example, you assign a new UIImage to our image view, here.
-UIKit will re-render your application's window into the frame buffer.
- And the next time the display hardware pulls from the frame buffer it'll get your new content.
-Now, you can contrast an image buffer to another kind of buffer, a data buffer, which is just a buffer that contains a sequence of bytes.
-In our case, we're concerned about data buffers that contain image files.
+UIKit will re-render your application's window into the frame buffer. UIKit은 window을 프레임 버퍼로 재 랜더링을 한다.
+ And the next time the display hardware pulls from the frame buffer it'll get your new content. 그다음에 디스플레이 하드웨어가 프레임 버퍼에서 새로운 컨텐츠를 받는다.
+
+Now, you can contrast an image buffer to another kind of buffer, a data buffer, which is just a buffer that contains a sequence of bytes. 일련의 바이트를 포함한 데이트 버퍼가 있다.
+
+In our case, we're concerned about data buffers that contain image files. 
 Perhaps, we've downloaded them from the network or we've loaded them from disk.
-A data buffer that contains an image file, typically, begins with some metadata describing the size of the image that's stored in that data buffer.
-And then, contains the image data itself, which is encoded in some form like JPEG compression or PNG.
- Which means that the bytes subsequent to that metadata don't, actually, directly describe anything about the pixels in the image.
+A data buffer that contains an image file, typically, begins with some metadata describing the size of the image that's stored in that data buffer. 이미지 파일을 갖고있고, 이미지 크기에 대한 메타데이터를 데이터 버퍼에 저장한다.
+And then, contains the image data itself, which is encoded in some form like JPEG compression or PNG. 제이피지 압축, 피엔지 같은 형식으로 인코딩 된 이미지 데이터 자체를 갖고있다.
+ Which means that the bytes subsequent to that metadata don't, actually, directly describe anything about the pixels in the image. 메타 데이터가 실제 픽셀 데이터를 의미하진 않는다.
+
 So, we can take a deeper look at this pipeline that we've set up.
-We have a UIImageView here and we've highlighted the region of the frame buffer that will be populated by the image view's rendering.
+We have a UIImageView here and we've highlighted the region of the frame buffer that will be populated by the image view's rendering. 이미지 뷰의 렌더링으로 채워질 프레임 버퍼 영역을 강조표시함.
 And we've assigned a UIImage to this image view.
-It's got a data buffer that represents the content of an image file.
+It's got a data buffer that represents the content of an image file. 데이트 버퍼는 이미지 파일의 컨텐츠를 의미한다.
  Perhaps, downloaded from the network or read from disk.
-But we need to be able to populate the frame buffer with per pixel data.
-So, in order to do that UIImage will allocate an image buffer whose size is equal to the size of the image that is contained in the data buffer.
- And perform an operation called decoding that will convert the JPEG or PNG or other encoded image data into per pixel image information.
+But we need to be able to populate the frame buffer with per pixel data. 하지만 픽셀당 데이터로 프레임 버퍼를 채울 수 있다.
+So, in order to do that UIImage will allocate an image buffer whose size is equal to the size of the image that is contained in the data buffer. 그래서 유아이 이미지는 데이터 버퍼에 포함된 이미지와 동일한 크기를 이미지 버퍼에 할당한다.
+ And perform an operation called decoding that will convert the JPEG or PNG or other encoded image data into per pixel image information. 인코딩된 이미지 데이터를 픽셀 단위 이미지 정보로 변환하는 디코딩 작업을한다.
 And then, depending on the content mode of our image view.
-When UIKit asks the image view to render it will copy and scale the image data from the image buffer as it copies it into the frame buffer.
-Now, that decoding phase can be CPU intensive, particularly, for large images.
-So, rather than do that work every time UIKit asks the image view to render, UIImage will hang onto that image buffer, so that it only does that work once.
-Consequently, your application, for every image that gets decoded, could have a persistent and large memory allocation hanging out.
+When UIKit asks the image view to render it will copy and scale the image data from the image buffer as it copies it into the frame buffer. UIKit이 이미지 뷰에 렌더링을 요청하면 프레임 버퍼로 복사 할 때 이미지 버퍼에서 이미지 데이터를 복사하고 크기를 조정한다.
+
+Now, that decoding phase can be CPU intensive, particularly, for large images. 큰 이미지에 경우 씨피유 과부하가 일어난다.
+So, rather than do that work every time UIKit asks the image view to render, UIImage will hang onto that image buffer, so that it only does that work once. uikit이 매번 이미지를 랜더하는게 아닌 이미지 버퍼에 요청한다.
+Consequently, your application, for every image that gets decoded, could have a persistent and large memory allocation hanging out.  결과적으로 앱은 디코딩되는 모든 이미지에 대한 메모리 할당을 줄일 수 있다. 
 And this allocation, as I mentioned earlier, is proportional to the size of the input image.
-Not necessarily, the size of the image view that's actually rendered in the frame buffer.
- And this can have some pretty negative consequences on performance.
-The large allocation that is in your application's address space could force other related content apart from content that it wants to reference.
+Not necessarily, the size of the image view that's actually rendered in the frame buffer. 반드시 프레임 버퍼에 이미지 크기 사이즈는 실제로 보여지는 사이즈여야한다.
+ And this can have some pretty negative consequences on performance. 이것은 성능에 부정적인 영향을 미친다.
+The large allocation that is in your application's address space could force other related content apart from content that it wants to reference. 애플리케이션의 주소 공간에있는 큰 할당은 참조하려는 콘텐츠와 다른 관련 콘텐츠를 강제 할 수 있고, 이를 프레그맨테이션이라고 한다.
  This is called fragmentation.
+
 Eventually, if your application starts accumulating a lot of memory usage the operating system will step in and start transparently compressing the content of physical memory.
 Now, the CPU needs to be involved in this operation so in addition to any CPU usage in your own application.
 You could be increasing global CPU usage that you have no control over.
@@ -63,6 +78,7 @@ And, eventually, if your application consumes enough memory, your application it
 And some of those background processes are doing important work on behalf of the user.
 So, they might get started up again as soon as they get terminated.
 So, even though your application might only be consuming memory for a short period of time, it can have this really long-tail effect on CPU utilization.
+
 So, we want to reduce the amount of memory that our application uses.
  And we can get ahead of the curve with a technique called downsampling.
 Now, here we see a little bit more detail about our image rendering pipeline.
